@@ -5,13 +5,11 @@ import AddTask from "./components/AddTask";
 
 function App() {
   const [tasks, setTask] = useState([]);
-  const [editingTaskId, setEditingTaskId] = useState(null); // Track editing task
+  const [editingTaskId, setEditingTaskId] = useState(null); // New state for editing
 
   const handleComplete = (id) => {
     setTask(
-      tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
+      tasks.map((task) => (task.id === id ? { ...task, done: !task.done } : task)) // Toggle done status
     );
   };
 
@@ -27,7 +25,9 @@ function App() {
   const handleEdit = (id, newTaskText) => {
     setTask(
       tasks.map((task) =>
-        task.id === id ? { ...task, task: newTaskText } : task
+        task.id === id
+          ? { ...task, task: newTaskText } // Preserve 'done' and 'id' when updating text
+          : task
       )
     );
     setEditingTaskId(null); // Reset editing state after saving
@@ -43,15 +43,16 @@ function App() {
           {/* tasks items */}
           {tasks
             .filter((task) => !task.done)
-            .map((task, index) => (
+            .map((task) => (
               <TaskItem
-                key={`task-${index}`}
+                key={task.id}
                 task={task}
+                done={task.done}
                 onComplete={handleComplete}
                 onRemove={handleRemove}
-                onEdit={handleEdit} // Pass the handleEdit function
-                editing={editingTaskId === task.id} // Check if task is being edited
-                setEditingTaskId={setEditingTaskId} // Function to set the editing task
+                onEdit={handleEdit}
+                editing={editingTaskId === task.id} // Check if task is in editing state
+                setEditingTaskId={setEditingTaskId} // Pass setter function
               />
             ))}
 
@@ -61,13 +62,16 @@ function App() {
           {/* done tasks */}
           {tasks
             .filter((task) => task.done)
-            .map((task, index) => (
+            .map((task) => (
               <TaskItem
-                key={`task-${index}`}
+                key={task.id}
                 task={task}
-                done
+                done={task.done}
                 onComplete={handleComplete}
                 onRemove={handleRemove}
+                onEdit={handleEdit}
+                editing={editingTaskId === task.id} // Check if task is in editing state
+                setEditingTaskId={setEditingTaskId} // Pass setter function
               />
             ))}
         </div>

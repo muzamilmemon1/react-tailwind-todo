@@ -11,9 +11,9 @@ export default function ({ type, onClick }) {
         <span className="material-symbols-outlined font-bold">edit</span>
       ) : type === "save" ? (
         <span className="material-symbols-outlined font-bold">save</span>
-      ) : (
+      ) : type === "remove" ? (
         <span className="material-symbols-outlined font-bold">close</span>
-      )}
+      ) : null}
     </button>
   );
 }
