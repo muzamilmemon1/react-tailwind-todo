@@ -7,8 +7,10 @@ export default function ({ type, onClick }) {
     >
       {type === "done" ? (
         <span className="material-symbols-outlined font-bold">done</span>
-      ) : type === "incomplete" ? (
-        <span className="material-symbols-outlined font-bold">close</span>
+      ) : type === "edit" ? (
+        <span className="material-symbols-outlined font-bold">edit</span>
+      ) : type === "save" ? (
+        <span className="material-symbols-outlined font-bold">save</span>
       ) : (
         <span className="material-symbols-outlined font-bold">close</span>
       )}

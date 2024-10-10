@@ -5,11 +5,12 @@ import AddTask from "./components/AddTask";
 
 function App() {
   const [tasks, setTask] = useState([]);
+  const [editingTaskId, setEditingTaskId] = useState(null); // Track editing task
 
   const handleComplete = (id) => {
     setTask(
       tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task // Toggle the done state
+        task.id === id ? { ...task, done: !task.done } : task
       )
     );
   };
@@ -23,14 +24,23 @@ function App() {
     setTask([...tasks, task]);
   };
 
+  const handleEdit = (id, newTaskText) => {
+    setTask(
+      tasks.map((task) =>
+        task.id === id ? { ...task, task: newTaskText } : task
+      )
+    );
+    setEditingTaskId(null); // Reset editing state after saving
+  };
+
   return (
     <div className="App flex bg-gradient-to-r from-blue-500 to-teal-200 justify-center items-center h-screen w-screen">
       <Container>
         <div className="flex flex-col flex-1 p-5 items-top gap-5">
-          {/* Add task */}
+          {/* add task */}
           <AddTask onAdd={handleAdd} />
 
-          {/* Incomplete tasks */}
+          {/* tasks items */}
           {tasks
             .filter((task) => !task.done)
             .map((task, index) => (
@@ -39,13 +49,16 @@ function App() {
                 task={task}
                 onComplete={handleComplete}
                 onRemove={handleRemove}
+                onEdit={handleEdit} // Pass the handleEdit function
+                editing={editingTaskId === task.id} // Check if task is being edited
+                setEditingTaskId={setEditingTaskId} // Function to set the editing task
               />
             ))}
 
-          {/* Separator */}
+          {/* separator */}
           <div className="w-full border border-blue-300"></div>
 
-          {/* Completed tasks */}
+          {/* done tasks */}
           {tasks
             .filter((task) => task.done)
             .map((task, index) => (
@@ -53,7 +66,8 @@ function App() {
                 key={`task-${index}`}
                 task={task}
                 done
-                onComplete={handleComplete} // Allow marking as incomplete
+                onComplete={handleComplete}
+                onRemove={handleRemove}
               />
             ))}
         </div>

@@ -1,6 +1,6 @@
 describe('Todo App', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173');
+    cy.visit('http://localhost:3000');
   });
 
   it('should add a new task', () => {
@@ -19,6 +19,13 @@ describe('Todo App', () => {
     cy.get('.material-symbols-outlined:contains("done")').click(); // Mark as done
     cy.get('.material-symbols-outlined:contains("close")').click(); // Mark as incomplete
     cy.get('.bg-sky-100').should('contain', 'Test Task');
+  });
+
+  it('should edit a task', () => {
+    cy.get('input[placeholder="Add a task here..."]').type('Test Task{enter}');
+    cy.get('.material-symbols-outlined:contains("edit")').click(); // Edit task
+    cy.get('input').clear().type('Updated Task{enter}');
+    cy.get('.bg-sky-100').should('contain', 'Updated Task');
   });
 
   it('should remove a task', () => {
