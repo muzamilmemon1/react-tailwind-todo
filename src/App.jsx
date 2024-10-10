@@ -8,7 +8,9 @@ function App() {
 
   const handleComplete = (id) => {
     setTask(
-      tasks.map((task) => (task.id === id ? { ...task, done: true } : task))
+      tasks.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task // Toggle the done state
+      )
     );
   };
 
@@ -25,10 +27,10 @@ function App() {
     <div className="App flex bg-gradient-to-r from-blue-500 to-teal-200 justify-center items-center h-screen w-screen">
       <Container>
         <div className="flex flex-col flex-1 p-5 items-top gap-5">
-          {/* add task */}
+          {/* Add task */}
           <AddTask onAdd={handleAdd} />
 
-          {/* tasks items */}
+          {/* Incomplete tasks */}
           {tasks
             .filter((task) => !task.done)
             .map((task, index) => (
@@ -40,14 +42,19 @@ function App() {
               />
             ))}
 
-          {/* separator */}
+          {/* Separator */}
           <div className="w-full border border-blue-300"></div>
 
-          {/* done tasks */}
+          {/* Completed tasks */}
           {tasks
             .filter((task) => task.done)
             .map((task, index) => (
-              <TaskItem key={`task-${index}`} task={task} done />
+              <TaskItem
+                key={`task-${index}`}
+                task={task}
+                done
+                onComplete={handleComplete} // Allow marking as incomplete
+              />
             ))}
         </div>
       </Container>
